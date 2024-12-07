@@ -1,0 +1,19 @@
+#gameboard {
+    background-color: aqua;
+}
+
+#player-hand {
+    background-color: blue;
+}
+
+#computer-hand-1 {
+    background-color: blueviolet;
+}
+
+#computer-hand-2 {
+    background-color: red;
+}
+
+#computer-hand-3 {
+    background-color: yellow;
+}
