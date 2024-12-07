@@ -8,9 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const deck = [];
 
     //Define variables for number of human and computer players
-    const numPlayers = 4;
+    let numPlayers = prompt("Please Enter the Number of Players (2-4)", "2");
     const numComputerPlayers = numPlayers - 1;
-    const test=document.getElementById('test');
 
     //Create the deck
     suits.forEach(suit => {
@@ -26,7 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
             [deck[i], deck[j]] = [deck[j], deck[i]];
         }
     }
-    
     
     //Shuffle the deck
     shuffleDeck(deck);
@@ -51,12 +49,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 const cardDiv = document.createElement('div');
                 cardDiv.classList.add('card');
                 //Need to make this read unknown eventually
-                cardDiv.innerText = `${card.rank} of ${card.suit}`;
+                cardDiv.innerText = 'Unknown Card';
                 computerHands[i].appendChild(cardDiv);
             }
         };
 
-        //Deal the gameboard
+        //Deal the Gameboard
         for(let i = 0; i < 4; i++){
             const card = deck.pop();
             const cardDiv = document.createElement('div');
@@ -65,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
             gameboard.appendChild(cardDiv);
         };
 
-        //Deal the hands
+        //Deal All Hands
         for(let i = 0; i < 7; i++) {
             const card = deck.pop();
             const cardDiv = document.createElement('div');
