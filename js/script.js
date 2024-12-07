@@ -6,6 +6,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const suits = ['hearts', 'diamonds', 'clubs', 'spades'];
     const ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
     const deck = [];
+    const computerHands = [[], [], []];
+    const computerHandDivs = [document.getElementById('computer-hand-1'), document.getElementById('computer-hand-2'), document.getElementById('computer-hand-3')];
+
 
     //Define variables for number of human and computer players
     let numPlayers = prompt("Please Enter the Number of Players (2-4)", "2");
@@ -33,7 +36,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function dealCards() {
         const gameboard = document.getElementById('gameboard');
         const playerHand = document.getElementById('player-hand');
-        const computerHands = [document.getElementById('computer-hand-1'), document.getElementById('computer-hand-2'), document.getElementById('computer-hand-3')];
 
         //Clear the containers
         gameboard.innerHTML = '';
@@ -48,9 +50,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const card = deck.pop();
                 const cardDiv = document.createElement('div');
                 cardDiv.classList.add('card');
-                //Need to make this read unknown eventually
                 cardDiv.innerText = 'Unknown Card';
-                computerHands[i].appendChild(cardDiv);
+                computerHandDivs[i].appendChild(cardDiv);
+                computerHands[i].push(card);
             }
         };
 
