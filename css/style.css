@@ -17,3 +17,9 @@
 #computer-hand-3 {
     background-color: yellow;
 }
+
+.card-back {
+    width: 71px;
+    height: 98px;
+    object-fit: cover;
+}
