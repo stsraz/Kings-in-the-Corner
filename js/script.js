@@ -26,7 +26,69 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    //Create a function that usess Fisher-Yates algorithm to shuffle the deck
+    function generateRandomIndexes(count, min, max) {
+        if (count > max + 1) {
+            console.log("Count is greater than the max.");
+            return;
+        } else {
+            let uniqueIndexes = new Set();
+            while (uniqueIndexes.size < count) {
+                uniqueIndexes.add(Math.floor(Math.random() * (max - min + 1)) + min);
+            }
+            return Array.from(uniqueIndexes);
+        }
+    }
+
+    const randomIndexes = generateRandomIndexes(52, 0, 51);
+    const shuffledDeck = randomIndexes.map((index) => deck[index]);
+
+    //BEGIN TEST BLOCK
+    //A function that compares two arrays to make sure length and content are not equal
+    function arraysEqual(arr1, arr2) {
+        if (arr1.length !== arr2.length) return false;
+        for (let i = 0; i < arr1.length; i++) {
+            if (arr1[i] !== arr2[i]) return false;
+        }
+    }
+
+    // Initializing duplicateFound for the test
+    let duplicateFound;
+
+    //A function that runs multiple shuffles to ensure that there are no duplicate shuffles
+    function testShuffle() {
+        const testArray = [];
+
+        for (i=0; i<500; i++) {
+            const randomIndexes = generateRandomIndexes(52, 0, 51);
+            const testShuffle = randomIndexes.map((index) => deck[index]);
+            testArray[i] = testShuffle;
+
+            let duplicateFound = false;
+            testArray.forEach((element, index) => {
+                if (index !== i && arraysEqual(element, testArray[i])) {
+                    duplicateFound=true;
+                } else{
+                    console.log("Checked and not a duplicate");
+                }
+            });
+        };
+        //If duplicateFound is true it will log as such. If not, it will log that instead.
+        if (duplicateFound) {
+            console.log("DUPLICATE!!");
+        } else {
+            console.log("NO DUPLICATES!!");
+        }
+    };
+
+    // Run the test. The result is no duplicate shuffles.
+    testShuffle();
+    //END TEST BLOCK
+    
+    //console.log(deck);
+    //console.log("---");
+    //console.log(shuffledDeck);
+
+    /* //Create a function that usess Fisher-Yates algorithm to shuffle the deck -- OLD FCTN
     function shuffleDeck(deck) {
         for (let i = deck.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -36,6 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     //Shuffle the deck
     shuffleDeck(deck);
+    */
 
     //Deal the cards to the gameboard and player/computer hands
     function dealCards() {
@@ -52,8 +115,8 @@ document.addEventListener('DOMContentLoaded', () => {
         //Declare a function for dealing computer hands
         function dealToComputers(numComputerPlayers) {
             for (i=0; i < numComputerPlayers; i++) {
-                //Deal a card from the deck
-                const card = deck.pop();
+                //Deal a card from the shuffled deck
+                const card = shuffledDeck.pop();
                 //Add card to computerr hand
                 computerHands[i].push(card);
 
@@ -75,8 +138,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         //Deal the Gameboard
         for(let i = 0; i < 4; i++){
-            //Deal a card from the deck
-            const card = deck.pop();
+            //Deal a card from the shuffled deck
+            const card = shuffledDeck.pop();
             
             //Create a div to hold the card and add a class 'card'
             const cardDiv = document.createElement('div');
@@ -95,8 +158,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         //Deal All Hands
         for(let i = 0; i < 7; i++) {
-            //Deal a card from the deck
-            const card = deck.pop();
+            //Deal a card from the shuffled deck
+            const card = shuffledDeck.pop();
             
             //Create a div to hold the card and add a class 'card'
             const cardDiv = document.createElement('div');
@@ -117,5 +180,6 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     };
 
-    dealCards();
+    //Commented out for shuffle testing for duplicate shuffles to ensure shuffle integrity
+    //dealCards();
 });
