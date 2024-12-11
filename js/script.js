@@ -56,7 +56,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const card = deck.pop();
                 //Add card to computerr hand
                 computerHands[i].push(card);
-                console.log(computerHands[i]);
 
                 //Create a div to hold the card and add a class 'card'
                 const cardDiv = document.createElement('div');
