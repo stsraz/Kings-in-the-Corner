@@ -1,8 +1,9 @@
 // Author: Joe Rasmussen
 
+//Code to run when the DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     
-    //Define Arrays for Card Suits, Ranks, and an empty array for the deck
+    //Define Arrays for Card Suits, Ranks, and an empty array for the deck, computer hands held in an array, and hard coding the ID's of where the computer hands are to be displayed.
     const suits = ['heart', 'diamond', 'club', 'spade'];
     const ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
     const deck = [];
@@ -17,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     //Create the deck
     suits.forEach(suit => {
         ranks.forEach(rank => {
+            //Generate a template literal for the file path to the card images
             const imageName = `${suit.charAt(0).toUpperCase() + suit.slice(1)} ${rank}.jpg`;
             deck.push({
                 suit,
@@ -26,6 +28,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    //Generate a set() to shuffle the deck. Set() was used to ensure no duplicate entries and to provide a more human like shuffle
+    //The Fisher-Yates algorithm would provide a more mathematically perfect shuffle, but I didn't want a mathematically perfect shuffle, just a realistic representation of the game I played as a kid.
+    //This shuffle function is also less confusing as it prevents the need for any direct array manipulation. 
+    //The set() returned as an array at the end.
+    //The if is to prevent going past the max if code was reused at a later date and time and was typo'd.
     function generateRandomIndexes(count, min, max) {
         if (count > max + 1) {
             console.log("Count is greater than the max.");
@@ -39,73 +46,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    //Create a new shuffled index for the deck
     const randomIndexes = generateRandomIndexes(52, 0, 51);
+    //Use the new index to "shuffle the deck."
     const shuffledDeck = randomIndexes.map((index) => deck[index]);
-
-    //BEGIN TEST BLOCK
-    //A function that compares two arrays to make sure length and content are not equal
-    function arraysEqual(arr1, arr2) {
-        if (arr1.length !== arr2.length) return false;
-        for (let i = 0; i < arr1.length; i++) {
-            if (arr1[i] !== arr2[i]) return false;
-        }
-    }
-
-    // Initializing duplicateFound for the test
-    let duplicateFound;
-
-    //A function that runs multiple shuffles to ensure that there are no duplicate shuffles
-    function testShuffle() {
-        const testArray = [];
-
-        for (i=0; i<500; i++) {
-            const randomIndexes = generateRandomIndexes(52, 0, 51);
-            const testShuffle = randomIndexes.map((index) => deck[index]);
-            testArray[i] = testShuffle;
-
-            let duplicateFound = false;
-            testArray.forEach((element, index) => {
-                if (index !== i && arraysEqual(element, testArray[i])) {
-                    duplicateFound=true;
-                } else{
-                    console.log("Checked and not a duplicate");
-                }
-            });
-        };
-        //If duplicateFound is true it will log as such. If not, it will log that instead.
-        if (duplicateFound) {
-            console.log("DUPLICATE!!");
-        } else {
-            console.log("NO DUPLICATES!!");
-        }
-    };
-
-    // Run the test. The result is no duplicate shuffles.
-    testShuffle();
-    //END TEST BLOCK
-    
-    //console.log(deck);
-    //console.log("---");
-    //console.log(shuffledDeck);
-
-    /* //Create a function that usess Fisher-Yates algorithm to shuffle the deck -- OLD FCTN
-    function shuffleDeck(deck) {
-        for (let i = deck.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [deck[i], deck[j]] = [deck[j], deck[i]];
-        }
-    }
-    
-    //Shuffle the deck
-    shuffleDeck(deck);
-    */
 
     //Deal the cards to the gameboard and player/computer hands
     function dealCards() {
         const gameboard = document.getElementById('gameboard');
         const playerHand = document.getElementById('player-hand');
 
-        //Clear the containers
+        //Clear the HTML containers
         gameboard.innerHTML = '';
         playerHand.innerHTML = '';
         computerHands.forEach(handContainer => {
@@ -114,23 +65,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
         //Declare a function for dealing computer hands
         function dealToComputers(numComputerPlayers) {
+            //Deal to each computer player
             for (i=0; i < numComputerPlayers; i++) {
                 //Deal a card from the shuffled deck
                 const card = shuffledDeck.pop();
-                //Add card to computerr hand
+                //Add card to computer hand
                 computerHands[i].push(card);
 
                 //Create a div to hold the card and add a class 'card'
                 const cardDiv = document.createElement('div');
                 cardDiv.classList.add('card');
                             
-                //Add img to the div and add a class 'card-image'
+                //Add img to the div, add a class 'card-image', add alt text if the image doesn't load, and add the cardBack image location
                 const cardImg = document.createElement('img');
                 cardImg.src = 'images/cards/cardBack.jpg';
-                cardImg.alt = 'The Diligent Coder Hard at Work';
+                cardImg.alt = 'The Diligent Coder';
                 cardImg.classList.add('card-back');
 
-                //Add cardImg as a child of cardDiv, and cardDiv as a child of the computer hands divs
+                //Add cardImg as a child of cardDiv, and cardDiv as a child of the computerHands divs held in the computerHandDivs located in the array.
                 cardDiv.appendChild(cardImg);
                 computerHandDivs[i].appendChild(cardDiv);
             }
@@ -171,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
             cardImg.alt = `${card.rank} of ${card.suit}`;
             cardImg.classList.add('card-image');
 
-            //Add cardImg as a child of cardDiv, and cardDiv as a child of the gameboard div
+            //Add cardImg as a child of cardDiv, and cardDiv as a child of the playerHand div
             cardDiv.appendChild(cardImg);
             playerHand.appendChild(cardDiv);
 
@@ -181,5 +133,5 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     //Commented out for shuffle testing for duplicate shuffles to ensure shuffle integrity
-    //dealCards();
+    dealCards();
 });
