@@ -1,5 +1,18 @@
+#game-container {
+    flex: 1;
+}
+
 #gameboard {
     background-color: aqua;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+}
+
+
+
+
+#foundationTop {
+    /* For the position of the top foundation card on the gameboard */
 }
 
 #player-hand {
