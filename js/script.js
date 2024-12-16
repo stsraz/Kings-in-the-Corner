@@ -14,8 +14,13 @@ document.addEventListener('DOMContentLoaded', () => {
     //Declare an array of arrays to hold the computer hands
     const computerHands = [[], [], []];
 
-    //Declare an array to hold the computer hands div location references
+    //Declare an array to hold the computer hands div location references for ease of reference
     const computerHandDivs = [document.getElementById("computer-hand-1"), document.getElementById("computer-hand-2"), document.getElementById("computer-hand-3")];
+
+    //Declare variables for the various div containers for ease of reference
+    const gameboard = document.getElementById('gameboard');
+    const playerHand = document.getElementById('player-hand');
+    const gameContainer = document.getElementById('game-container');
 
     //Create arrays for card location naming
     const foundationLocation = [['Top'], ['Bottom'], ['Left'], ['Right']];
@@ -57,8 +62,31 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             });
         });
+    }
 
-        //Create and name the div for the deck
+    //Create the deck before declaring and caling shuffleDeck.
+    createDeck();
+
+    function shuffleDeck (deck) {
+        //Create a new shuffled index for the deck
+        const randomIndexes = generateRandomIndexes(52, 0, 51);
+
+        //Use the new index to "shuffle the deck" by using map to create a new shuffledDeck array.
+        shuffledDeck = randomIndexes.map((index) => deck[index]);
+    }
+    //Shuffle the deck before declaring and calling dealCards where the shuffled deck array is needed.
+    shuffleDeck(deck);
+
+    //Deal the cards to the gameboard and player/computer hands
+    function dealCards() {
+        //Clear the HTML containers for when I start a new game
+        gameboard.innerHTML = '';
+        playerHand.innerHTML = '';
+        computerHands.forEach(handContainer => {
+            handContainer.innerHTML = '';
+        });
+
+        //Create and name the div for the deck with the unused cards
         const deckDiv = document.createElement('div');
         deckDiv.classList.add('card');
         deckDiv.classList.add('foundation');
@@ -73,35 +101,6 @@ document.addEventListener('DOMContentLoaded', () => {
         //Add deckImg as a child of deckDiv, and deckDiv as a child of the gameboard div
         deckDiv.appendChild(deckImg);
         gameboard.appendChild(deckDiv);
-    }
-
-
-    function shuffleDeck (deck) {
-        //Create a new shuffled index for the deck
-        const randomIndexes = generateRandomIndexes(52, 0, 51);
-
-        //Use the new index to "shuffle the deck" by using map to create a new shuffledDeck array.
-        shuffledDeck = randomIndexes.map((index) => deck[index]);
-    }
-
-    //Deal the cards to the gameboard and player/computer hands
-    function dealCards() {
-        //Assign div locations to variables
-        const gameboard = document.getElementById('gameboard');
-        const playerHand = document.getElementById('player-hand');
-
-        //Clear the HTML containers
-        gameboard.innerHTML = '';
-        playerHand.innerHTML = '';
-        computerHands.forEach(handContainer => {
-            handContainer.innerHTML = '';
-        });
-
-        //Create the deck
-        createDeck();
-
-        //Shuffle the deck
-        shuffledDeck = shuffleDeck(deck);
 
         //Deal the Gameboard
         for(let i = 0; i < 4; i++){
@@ -127,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         //Create a function for dealing computer hands
-        function dealToComputers(numComputerPlayers) {
+        function dealToComputers(numComputerPlayers, extI) {
             //Deal to each computer player
             for (i=0; i < numComputerPlayers; i++) {
                 //Deal a card from the shuffled deck
@@ -137,7 +136,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 //Create a div to hold the card and add a class 'card'
                 const cardDiv = document.createElement('div');
-                cardDiv.classList.add('card');
+                cardDiv.classList.add(`computerPlayer${i + 1}Hand`);
+                cardDiv.id = `card${extI + 1}`
                             
                 //Add img to the div, add a class 'card-image', add alt text if the image doesn't load, and add the cardBack image location
                 const cardImg = document.createElement('img');
@@ -148,6 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 //Add cardImg as a child of cardDiv, and cardDiv as a child of the computerHands divs held in the computerHandDivs located in the array.
                 cardDiv.appendChild(cardImg);
                 computerHandDivs[i].appendChild(cardDiv);
+                gameContainer.appendChild(computerHandDivs[i]);
             }
         };        
 
@@ -170,9 +171,10 @@ document.addEventListener('DOMContentLoaded', () => {
             //Add cardImg as a child of cardDiv, and cardDiv as a child of the playerHand div
             cardDiv.appendChild(cardImg);
             playerHand.appendChild(cardDiv);
+            
 
             //Call function to deal hands in series with the players hand so that deals go player, comp 1, comp 2, comp 3
-            dealToComputers(numComputerPlayers);
+            dealToComputers(numComputerPlayers , i);
         };
     };
 
