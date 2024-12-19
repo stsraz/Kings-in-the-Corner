@@ -88,8 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         //Create and name the div for the deck with the unused cards
         const deckDiv = document.createElement('div');
-        deckDiv.classList.add('card');
-        deckDiv.classList.add('foundation');
+        deckDiv.classList.add('deck');
         deckDiv.id = 'deck';
         
         //Add img to the div and add a class 'card-back'
@@ -135,9 +134,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 computerHands[i].push(card);
 
                 //Create a div to hold the card and add a class 'card'
+                //Give the div an ID name to reference the card number in the hand. It passes in the i from the calling function and names it 'extI'
                 const cardDiv = document.createElement('div');
-                cardDiv.classList.add(`computerPlayer${i + 1}Hand`);
-                cardDiv.id = `card${extI + 1}`
+                cardDiv.classList.add('card');
+                cardDiv.classList.add('horizontalHandCard');
+
+                //Assigning the hand index CSS variable in the style property using the i variable of the outer loop
+                cardDiv.style.setProperty('--i', extI);
                             
                 //Add img to the div, add a class 'card-image', add alt text if the image doesn't load, and add the cardBack image location
                 const cardImg = document.createElement('img');
@@ -157,11 +160,15 @@ document.addEventListener('DOMContentLoaded', () => {
             //Deal a card from the shuffled deck
             const card = shuffledDeck.pop();
             
+            //Player Hand
             //Create a div to hold the card and add classes 'card' and 'hand'
             const cardDiv = document.createElement('div');
             cardDiv.classList.add('card');
-            cardDiv.classList.add('hand');
-            
+            cardDiv.classList.add('horizontalHandCard');
+
+            //Assigning the hand index CSS variable in the style property using the i variable of the loop
+            cardDiv.style.setProperty('--i', i);
+
             //Add img to the div and add a class 'card-image'
             const cardImg = document.createElement('img');
             cardImg.src = card.imageUrl;
@@ -176,6 +183,12 @@ document.addEventListener('DOMContentLoaded', () => {
             //Call function to deal hands in series with the players hand so that deals go player, comp 1, comp 2, comp 3
             dealToComputers(numComputerPlayers , i);
         };
+        //Add a direction and hand class to the player and computer hands for CSS
+        playerHand.classList.add('horizontalHand');
+        computerHandDivs[0].classList.add('verticalHand');
+        computerHandDivs[1].classList.add('horizontalHand');
+        computerHandDivs[2].classList.add('verticalHand');
+
     };
 
     dealCards();

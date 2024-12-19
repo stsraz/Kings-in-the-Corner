@@ -1,5 +1,8 @@
+/*Div ID's*/
+
 /*Game Container Elements*/
 #game-container {
+    /*Creates the grid holding the gameboard, player-hand, and computer-hand-(1-3) divs*/
     display: grid;
     grid-template-columns: repeat(3, auto);
     grid-template-rows: repeat(3, auto);
@@ -7,6 +10,7 @@
 }
 
 #gameboard {
+    /*Creates the grid holding the actual gameboard foundations and the deck you would draw from*/
     background-color: aqua;
     grid-column: 2;
     grid-row: 2;
@@ -17,6 +21,7 @@
     place-items: center;
 }
 
+/*These all position the hands and add flexbox to them*/
 #player-hand {
     background-color: blue;
     grid-column: 2;
@@ -47,9 +52,9 @@
     flex-direction: column;
 }
 
-/*Gameboard cards*/
+/*Positioning the gameboard foundation cards top, left, right, and bottom, and the draw deck*/
+/*Eventually this will have to adjust to add the corner foundation locations*/
 #foundationTop {
-    /* For the position of the top foundation card on the gameboard */
     grid-column: 2;
     grid-row: 1;
 }
@@ -75,8 +80,32 @@
     grid-row: 3;
 }
 
+/*Classes*/
+
 .card-back {
     width: 71px;
     height: 98px;
     object-fit: cover;
+}
+
+/*Hand Classes*/
+.horizontalHand {
+    position: relative;
+    height: 98px;
+}
+
+.verticalHand {
+    position: relative;
+    height: 196px;
+}
+
+.horizontalHand .card {
+    position: absolute;
+    transform: translateX(calc(50% * var(--i)));
+}
+
+
+.verticalHand .card {
+    position: absolute;
+    transform: translateY(calc(50% * var(--i)));
 }
